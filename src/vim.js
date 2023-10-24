@@ -1993,10 +1993,14 @@ export function initVim(CodeMirror) {
         return best;
       },
       moveByCharacters: function(_cm, head, motionArgs) {
-        var cur = head;
         var repeat = motionArgs.repeat;
-        var ch = motionArgs.forward ? cur.ch + repeat : cur.ch - repeat;
-        return new Pos(cur.line, ch);
+        var selection = _cm.cm6.moveByChar(
+          _cm.cm6.state.selection.main, 
+          motionArgs.forward, 
+          () => () => --repeat > 0
+        );
+        var index = selection.anchor;
+        return _cm.posFromIndex(index);
       },
       moveByLines: function(cm, head, motionArgs, vim) {
         var cur = head;
